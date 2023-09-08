@@ -19,15 +19,23 @@ class Solution {
     // Map serves to store those right substrings to improve time efficiency
 
     public boolean wordBreak(String s, List<String> wordDict) {
-        if (wordDict.contains(s)) {
-            return true;
+        if (wordDict.contains(s)) { // suppose original string is 'aaapple' and dict contains 'a, apple' in first
+            return true; // call we already said yes 'a' is a dict item, put that in map. so we go and find another 'a'
+            // in aapple. finaly substrirng is apple, and that exists, so no sense breaking it down. its in the dict,
+            // return true
         }
-        if (map.containsKey(s)) {
+        if (map.containsKey(s)) { // this handles redundant substings like aaab and aab as above. instead of full recursion
+            // thrrough all chars again, just retturn whether that substring can be broken down into different dict words
             return map.get(s);
         }
-        for (int i = 1; i <= s.length(); i++) {
+        for (int i = 1; i <= s.length(); i++) {// tricky part. L starts as just index 0 as substring.
             String left = s.substring(0, i);
-            if (wordDict.contains(left) && wordBreak(s.substring(i), wordDict)) {
+            if (wordDict.contains(left) && wordBreak(s.substring(i), wordDict)) { // recusrively calls  using substring and
+                // each call will begin another call at index 0. will start to reach base cases where either the dictionary
+                // does contain the value, it was already tested and mapped or was not tested and need to map as false.
+                // only then do we return to for loop on top of call stack and increment 'i', etc. and pop off recurrsivee
+                // calls all the way back to first loop on orginal call, we increment original for loop and do the whole
+                // thting over until we loop tthrtough entire original wordBreak call
                 map.put(s, true);
                 return true;
             }
@@ -35,7 +43,7 @@ class Solution {
         map.put(s, false);
         return false;
     }
-} // TBH this is still hard and i only 90% get it. going to come back when reviewing for last 10%
+} // if i actually wanted to write out the caall stacks. 'aab' is a good short example wheree 'ab' will be redundant
 
 
 // ATTEMPT
